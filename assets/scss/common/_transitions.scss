@@ -1,0 +1,22 @@
+//fade
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 3s;
+}
+
+.fade-enter,
+.fade-leave-active {
+    opacity: 0;
+}
+
+.fade-fast-enter-active,
+.fade-fast-leave-active {
+    transition: opacity .4s;
+}
+
+.fade-fast-enter,
+.fade-fast-leave-active {
+    /*stylelint-disable*/
+    opacity: 0 !important;
+    /*stylelint-enable*/
+}

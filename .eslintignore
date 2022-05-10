@@ -1,0 +1,7 @@
+node_modules/*
+config/plugins/**/*.js
+config/plugins/*.js
+.nuxt/**/*.vue
+assets/js/**/*.js
+assets/scss/*.scss
+assets/scss/**/*.scss

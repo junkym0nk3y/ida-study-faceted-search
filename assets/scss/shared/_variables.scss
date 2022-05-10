@@ -1,0 +1,43 @@
+/*  Fonts */
+$base-font: "Nato Sans", "Arial", sans-serif;
+$base-font-size: 1.6rem;
+$body-color: #000;
+
+/* Colors */
+$orange: #ea572a;
+$violet: #6e4b9c;
+$blue: #2963eb;
+$sky: #7cb4ff;
+$mint: #72ca97;
+$error: #d63c32;
+$grey: #88919d;
+$grey-light: #efefef;
+$accept:#50b85a;
+$black-100: #4e4e4e;
+$black-300: #555;
+$black-400: #333;
+$black-600: #222;
+$black-900: #111;
+
+/* Breakpoints */
+$breakpoints: (
+    xs: 0,
+    sm: 768px,
+    md: 1024px,
+    lg: 1280px,
+    xl: 1440px,
+);
+
+/* Grid */
+$aside-padding: 2.4rem;
+$header-h: 17rem;
+$header-z-index: 20;
+$footer-h: 18rem;
+$aside-padding-mobile: 32px;
+$aside-padding-tablet: 40px;
+$header-h-mobile: 80px;
+$header-h-tablet: 80px;
+$footer-h-mobile: 272px;
+
+/* Transitions */
+$default-transition: .4s ease;
