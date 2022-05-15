@@ -20,7 +20,6 @@
 
     export default {
         name: 'DefaultLayout',
-
         components: {
             TheHeader,
             // TheFooter,

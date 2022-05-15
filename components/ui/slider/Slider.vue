@@ -111,54 +111,67 @@
                 type: Number,
                 default: 0,
             },
+
             max: {
                 type: Number,
                 default: 100,
             },
+
             step: {
                 type: Number,
                 default: 1,
             },
+
             value: {
                 type: [Number, String, Array],
                 default: 0,
             },
+
             range: {
                 type: Boolean,
                 default: false,
             },
+
             vertical: {
                 type: Boolean,
                 default: false,
             },
+
             height: {
                 type: String,
                 default: '',
             },
+
             disabled: {
                 type: Boolean,
                 default: false,
             },
+
             showStops: {
                 type: Boolean,
                 default: false,
             },
+
             showValue: {
                 type: Boolean,
                 default: false,
             },
+
             valueFormat: {
                 type: Function,
                 default: splitThousands,
             },
+
             marks: {
                 type: Object,
                 default: () => ({}),
             },
+
             tooltip: {
                 type: String,
                 default: 'never',
             },
+
             noTransition: Boolean,
             color: {
                 type: String,
@@ -187,6 +200,7 @@
                     },
                 ];
             },
+
             //
             // Используется для расчета ширины прогресс бара и для слежения, когда firstValue
             // станет больше secondValue.

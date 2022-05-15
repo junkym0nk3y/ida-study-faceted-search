@@ -37,32 +37,39 @@
                 type: String,
                 required: true,
             },
+
             spec: {
                 type: Object,
                 required: true,
                 default: () => ({ min: 1, max: 100 }),
             },
+
             facet: {
                 type: Object,
                 required: true,
                 default: () => ({}),
             },
+
             values: {
                 type: Object,
                 default: () => ({}),
             },
+
             valueMin: {
                 type: String,
                 default: '',
             },
+
             valueMax: {
                 type: String,
                 default: '',
             },
+
             color: {
                 type: String,
                 default: '',
             },
+
             positiveOnly: {
                 type: Boolean,
                 default: true,

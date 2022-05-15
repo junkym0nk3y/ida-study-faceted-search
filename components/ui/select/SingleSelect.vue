@@ -42,9 +42,7 @@
             <div v-if="isOpened"
                  class="c-select__dropdown"
             >
-                <CScrollBox ref="scrollbar"
-                            class="c-select__dropdownWrap"
-                >
+                <perfect-scrollbar>
                     <Option v-for="(option, index) in optionList"
                             :key="option.value"
                             :option="option"
@@ -54,7 +52,7 @@
                             @mouseleave="highlightIndex = -1 "
                             @click="onOptionSelect"
                     />
-                </CScrollBox>
+                </perfect-scrollbar>
             </div>
         </transition>
 
@@ -77,256 +75,253 @@
 </template>
 
 <script type="text/babel">
-  import Option from './Option';
-  import Clickoutside from '../../directives/clickoutside';
-  import CScrollBox from '../scrollbox/CScrollBox';
+    import Option from './Option';
 
-  export default {
-    name: 'SingleSelect',
+    export default {
+        name: 'SingleSelect',
 
-    components: {
-      CScrollBox,
-      Option,
-    },
+        components: {
+            Option,
+        },
 
-    directives: {
-      Clickoutside,
-    },
+        props: {
+            /**
+             * Имя поля формы
+             */
+            name: {
+                type: String,
+                default: '',
+            },
 
-    props: {
-      /**
-       * Имя поля формы
-       */
-      name: {
-          type: String,
-          default: '',
-      },
+            value: {
+                type: String,
+                required: true,
+            },
 
-      value: {
-        type: String,
-        required: true,
-      },
-      options: {
-        type: Array,
-        default: () => [],
-      },
-      placeholder: {
-        type: String,
-        default: '',
-      },
-      resetLabel: {
-          type: String,
-          default: '',
-      },
-      disabled: Boolean,
-      error: Boolean,
-      success: Boolean,
-      required: Boolean,
-      hideSelected: Boolean,
-      bordered: {
-        type: Boolean,
-        default: true,
-      },
+            options: {
+                type: Array,
+                default: () => [],
+            },
 
-      facet: {
-        type: Array,
-        default: undefined,
-      },
+            placeholder: {
+                type: String,
+                default: '',
+            },
 
-      color: {
-        type: String,
-        default: null,
-        validator: val => [
-          'white',
-          'grey',
-        ].includes(val),
-      },
+            resetLabel: {
+                type: String,
+                default: '',
+            },
 
-      size: {
-        type: String,
-        default: null,
-        validator: val => [
-          's', 'm',
-        ].includes(val),
-      },
-    },
+            disabled: Boolean,
+            error: Boolean,
+            success: Boolean,
+            required: Boolean,
+            hideSelected: Boolean,
+            bordered: {
+                type: Boolean,
+                default: true,
+            },
 
-    data() {
-      return {
-        isFocused: false,
-        isOpened: false,
-        highlightIndex: -1,
-        inputHovering: false,
-      };
-    },
+            facet: {
+                type: Array,
+                default: undefined,
+            },
 
-    computed: {
-      classList() {
-        return [
-          {
-            _selected: this.selectedOption,
-            _focused: this.isFocused,
-            _opened: this.isOpened,
-            _disabled: this.isDisabled,
-            _error: this.error,
-            _success: this.success,
-            _bordered: this.bordered,
+            color: {
+                type: String,
+                default: null,
+                validator: val => [
+                    'white',
+                    'grey',
+                ].includes(val),
+            },
 
-            [`_${this.color}`]: this.color,
-            [`_${this.size}`]: this.size,
-          },
-        ];
-      },
+            size: {
+                type: String,
+                default: null,
+                validator: val => [
+                    's', 'm',
+                ].includes(val),
+            },
+        },
 
-      optionList() {
-        const options = [];
-        if (this.resetLabel && this.value) {
-          options.push({
-            label: this.resetLabel,
-            value: '',
-          });
-        }
+        data() {
+            return {
+                isFocused: false,
+                isOpened: false,
+                highlightIndex: -1,
+                inputHovering: false,
+            };
+        },
 
-        this.options.forEach(opt => {
-          if (opt.value === this.value && this.hideSelected) {
-            return;
-          }
+        computed: {
+            classList() {
+                return [
+                    {
+                        _selected: this.selectedOption,
+                        _focused: this.isFocused,
+                        _opened: this.isOpened,
+                        _disabled: this.isDisabled,
+                        _error: this.error,
+                        _success: this.success,
+                        _bordered: this.bordered,
 
-          options.push({
-            ...opt,
-            disabled: this.facet && !this.facet.includes(opt.value) && opt.value !== '',
-          });
-        });
+                        [`_${this.color}`]: this.color,
+                        [`_${this.size}`]: this.size,
+                    },
+                ];
+            },
 
-        return options;
-      },
+            optionList() {
+                const options = [];
+                if (this.resetLabel && this.value) {
+                    options.push({
+                        label: this.resetLabel,
+                        value: '',
+                    });
+                }
 
-      mobileOptionList() {
-        const options = [];
+                this.options.forEach(opt => {
+                    if (opt.value === this.value && this.hideSelected) {
+                        return;
+                    }
 
-        if (this.resetLabel) {
-          options.push({
-            label: this.resetLabel ? this.resetLabel : '-',
-            value: '',
-            disabled: false,
-          });
-        }
+                    options.push({
+                        ...opt,
+                        disabled: this.facet && !this.facet.includes(opt.value) && opt.value !== '',
+                    });
+                });
 
-        this.options.forEach(opt => {
-          options.push({
-            ...opt,
-            disabled: this.facet && !this.facet.includes(opt.value) && opt.value !== '',
-          });
-        });
+                return options;
+            },
 
-        return options;
-      },
+            mobileOptionList() {
+                const options = [];
 
-      selectedOption() {
-        const selected = this.options.filter(a => a.value === this.value)[0];
-        return selected || null;
-      },
+                if (this.resetLabel) {
+                    options.push({
+                        label: this.resetLabel ? this.resetLabel : '-',
+                        value: '',
+                        disabled: false,
+                    });
+                }
 
-      selectedLabel() {
-        return this.selectedOption
-          ? this.selectedOption.label
-          : this.placeholder;
-      },
+                this.options.forEach(opt => {
+                    options.push({
+                        ...opt,
+                        disabled: this.facet && !this.facet.includes(opt.value) && opt.value !== '',
+                    });
+                });
 
-      isDisabled() {
-        return this.disabled || this.options.length === 0;
-      },
-    },
+                return options;
+            },
 
-    methods: {
-      navigateOptions(direction) {
-        if (!this.isOpened) {
-          this.isOpened = true;
-          return;
-        }
+            selectedOption() {
+                const selected = this.options.filter(a => a.value === this.value)[0];
+                return selected || null;
+            },
 
-        if (direction === 'down') {
-          this.highlightIndex++;
-          if (this.highlightIndex === this.optionList.length) {
-            this.highlightIndex = 0;
-          }
-        } else if (direction === 'up') {
-          this.highlightIndex--;
-          if (this.highlightIndex < 0) {
-            this.highlightIndex = this.optionList.length - 1;
-          }
-        }
+            selectedLabel() {
+                return this.selectedOption
+                    ? this.selectedOption.label
+                    : this.placeholder;
+            },
 
-        const option = this.optionList[this.highlightIndex];
-        if (option.disabled) {
-          this.navigateOptions(direction);
-        }
-      },
+            isDisabled() {
+                return this.disabled || this.options.length === 0;
+            },
+        },
 
-      toggleMenu() {
-        if (this.isDisabled) {
-          return;
-        }
-        this.isOpened = !this.isOpened;
+        methods: {
+            navigateOptions(direction) {
+                if (!this.isOpened) {
+                    this.isOpened = true;
+                    return;
+                }
 
-        if (this.isOpened) {
-          this.$refs.input.focus();
-        }
-      },
+                if (direction === 'down') {
+                    this.highlightIndex++;
+                    if (this.highlightIndex === this.optionList.length) {
+                        this.highlightIndex = 0;
+                    }
+                } else if (direction === 'up') {
+                    this.highlightIndex--;
+                    if (this.highlightIndex < 0) {
+                        this.highlightIndex = this.optionList.length - 1;
+                    }
+                }
 
-      onEnterPress() {
-        if (!this.isOpened) {
-          this.toggleMenu();
-        } else if (this.optionList[this.highlightIndex]) {
-          this.onOptionSelect(this.optionList[this.highlightIndex]);
-        }
-      },
+                const option = this.optionList[this.highlightIndex];
+                if (option.disabled) {
+                    this.navigateOptions(direction);
+                }
+            },
 
-      onOptionSelect(option) {
-        if (this.value !== option.value) {
-          this.$emit('input', option.value);
-          this.name ?
-            this.$emit('change', { [this.name]: option.value }) :
-            this.$emit('change', option.value);
-        }
-        this.isOpened = false;
-        this.$refs.input.focus();
-      },
+            toggleMenu() {
+                if (this.isDisabled) {
+                    return;
+                }
+                this.isOpened = !this.isOpened;
 
-      /**
-       * Метод, который обрабатывает собите focus на инпуте
-       */
-      onFocus() {
-        this.isFocused = true;
-        this.$emit('focus');
-      },
+                if (this.isOpened) {
+                    this.$refs.input.focus();
+                }
+            },
 
-      /**
-       * Метод, который обрабатывает собите blur на инпуте
-       */
-      onBlur() {
-        if (this.isOpened) {
-          this.isOpened = false;
-        }
-        this.isFocused = false;
-        this.$emit('blur');
-      },
+            onEnterPress() {
+                if (!this.isOpened) {
+                    this.toggleMenu();
+                } else if (this.optionList[this.highlightIndex]) {
+                    this.onOptionSelect(this.optionList[this.highlightIndex]);
+                }
+            },
 
-      onClickOutside() {
-        if (!this.isFocused) {
-          return;
-        }
-        this.isOpened = false;
-        this.isFocused = false;
-        this.$emit('blur');
-      },
+            onOptionSelect(option) {
+                if (this.value !== option.value) {
+                    this.$emit('input', option.value);
+                    this.name ?
+                        this.$emit('change', { [this.name]: option.value }) :
+                        this.$emit('change', option.value);
+                }
+                this.isOpened = false;
+                this.$refs.input.focus();
+            },
 
-      onNativeChange(e) {
-        this.$emit('input', e.target.value);
-        this.name ?
-          this.$emit('change', { [this.name]: e.target.value }) :
-          this.$emit('change', e.target.value);
-      },
-    },
-  };
+            /**
+             * Метод, который обрабатывает собите focus на инпуте
+             */
+            onFocus() {
+                this.isFocused = true;
+                this.$emit('focus');
+            },
+
+            /**
+             * Метод, который обрабатывает собите blur на инпуте
+             */
+            onBlur() {
+                if (this.isOpened) {
+                    this.isOpened = false;
+                }
+                this.isFocused = false;
+                this.$emit('blur');
+            },
+
+            onClickOutside() {
+                if (!this.isFocused) {
+                    return;
+                }
+                this.isOpened = false;
+                this.isFocused = false;
+                this.$emit('blur');
+            },
+
+            onNativeChange(e) {
+                this.$emit('input', e.target.value);
+                this.name ?
+                    this.$emit('change', { [this.name]: e.target.value }) :
+                    this.$emit('change', e.target.value);
+            },
+        },
+    };
 </script>

@@ -405,6 +405,12 @@
         "vue/singleline-html-element-content-newline": "off",
         "vue/html-closing-bracket-spacing": "off",
         "vue/no-reserved-keys": "off",
-        "vue/padding-line-between-blocks": 2
+        "vue/padding-line-between-blocks": 2,
+        "vue/new-line-between-multi-line-property": [
+            "error",
+            {
+                "minLineOfMultilineProperty": 2
+            }
+        ]
     }
 }

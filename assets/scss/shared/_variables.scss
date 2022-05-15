@@ -13,11 +13,11 @@ $error: #d63c32;
 $grey: #88919d;
 $grey-light: #efefef;
 $accept:#50b85a;
-$black-100: #4e4e4e;
-$black-300: #555;
-$black-400: #333;
-$black-600: #222;
-$black-900: #111;
+$base-100: #4e4e4e;
+$base-300: #555;
+$base-400: #333;
+$base-600: #222;
+$base-900: #111;
 
 /* Breakpoints */
 $breakpoints: (
@@ -30,7 +30,7 @@ $breakpoints: (
 
 /* Grid */
 $aside-padding: 2.4rem;
-$header-h: 17rem;
+$header-h: 6.2rem;
 $header-z-index: 20;
 $footer-h: 18rem;
 $aside-padding-mobile: 32px;

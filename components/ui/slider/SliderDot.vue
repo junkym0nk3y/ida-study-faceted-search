@@ -1,6 +1,7 @@
 <template>
     <div class="c-slider-dot"
-         :class="{_hover: hovering, _dragging: dragging }"
+         :class="{_hover: hovering,
+                  _dragging: dragging }"
          :style="styles"
          tabindex="0"
          @focus="onMouseEnter"
@@ -34,11 +35,13 @@
                 type: Number,
                 default: 0,
             },
+
             vertical: Boolean,
             dragging: {
                 type: Boolean,
                 default: false,
             },
+
             focus: {
                 type: Boolean,
                 default: false,
@@ -61,24 +64,31 @@
             disabled() {
                 return this.$parent.$disabled;
             },
+
             max() {
                 return this.$parent.max;
             },
+
             min() {
                 return this.$parent.min;
             },
+
             step() {
                 return this.$parent.step;
             },
+
             tooltip() {
                 return this.$parent.tooltip;
             },
+
             precision() {
                 return this.$parent.precision;
             },
+
             enableFormat() {
                 return this.$parent.tooltipFormat instanceof Function;
             },
+
             formatValue() {
                 return this.enableFormat && this.$parent.tooltipFormat(this.value) || this.value;
             },
@@ -123,6 +133,7 @@
             onMouseEnter() {
                 this.hovering = true;
             },
+
             onMouseLeave() {
                 this.hovering = false;
             },

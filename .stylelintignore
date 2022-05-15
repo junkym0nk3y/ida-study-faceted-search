@@ -1,4 +1,3 @@
-.nuxt/**/*.vue
-assets/js/**/*.js
-assets/scss/*.scss
-assets/scss/**/*.scss
+node_modules/*
+.nuxt/*
+assets/scss/*

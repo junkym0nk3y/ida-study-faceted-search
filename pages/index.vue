@@ -1,7 +1,7 @@
 <template>
     <div :class="['page', $style.MainPage]">
         <div class="container">
-            Тест
+            <h1>Проекты {{ count }}</h1>
         </div>
     </div>
 </template>

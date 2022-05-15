@@ -17,10 +17,12 @@
                 required: true,
                 default: () => ({}),
             },
+
             value: {
                 type: [String, Array],
                 required: true,
             },
+
             isHighlighted: Boolean,
         },
 
@@ -47,22 +49,22 @@
         methods: {
             onClick() {
                 if (this.option.disabled) {
-return;
-}
+                    return;
+                }
                 this.$emit('click', this.option);
             },
 
             onMouseEnter() {
                 if (this.option.disabled) {
-return;
-}
+                    return;
+                }
                 this.$emit('mouseenter');
             },
 
             onMouseLeave() {
                 if (this.option.disabled) {
-return;
-}
+                    return;
+                }
                 this.$emit('mouseleave');
             },
         },

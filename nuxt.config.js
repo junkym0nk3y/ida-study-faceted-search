@@ -1,28 +1,8 @@
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 import { plugins } from './config/plugins';
-import { proxy } from './config/proxy';
-
-
-const env = {
-    gql: process.env.GRAPHQL_URL,
-    proxy: process.env.PROXY_URL,
-    sentry: process.env.SENTRY_DSN,
-};
-
 
 module.exports = {
-    // Global environments
-    env: {
-        ...env,
-    },
-
-    render: {
-        http2: {
-            push: true,
-        },
-    },
-
     // * Headers of the page
     head: {
         htmlAttrs: {
@@ -72,13 +52,16 @@ module.exports = {
     },
 
     // * Global CSS
-    css: ['~/assets/scss/vendors.scss', '~/assets/scss/bundle.scss'],
+    css: [
+        '~/assets/scss/bundle.scss',
+    ],
 
     styleResources: {
         scss: [
             './assets/scss/shared/_mixins.scss',
             './assets/scss/shared/_fonts.scss',
             './assets/scss/shared/_variables.scss',
+            './assets/scss/default.scss',
         ],
         hoistUseStatements: true,
     },
@@ -101,11 +84,6 @@ module.exports = {
         linkActiveClass: '_active-link',
         linkExactActiveClass: '_exact-link',
     },
-
-    /**
-     * Модуль прокси решает проблемы с CORS, используется только на локалке
-     */
-    proxy: env.proxy ? proxy() : {},
 
     // * Build configuration
     build: {
@@ -167,10 +145,10 @@ module.exports = {
                 }));
 
                 config.plugins.push(new StyleLintPlugin({
-                    files: ['**/*.scss', '**/*.vue'],
                     extensions: ['scss', 'vue'],
                     failOnError: false,
-                    quiet: false,
+                    quiet: true,
+                    emitWarning: true,
                     lintDirtyModulesOnly: true,
                 }));
             }
