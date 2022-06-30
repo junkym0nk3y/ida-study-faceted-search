@@ -1,6 +1,5 @@
 <template>
-    <div class="c-select__dropdownOption"
-         :class="classList"
+    <div :class="[$style.Option, classList]"
          @mouseenter="onMouseEnter"
          @mouseleave="onMouseLeave"
          @click="onClick"
@@ -11,6 +10,8 @@
 
 <script>
     export default {
+        name: 'Option',
+
         props: {
             option: {
                 type: Object,
@@ -21,6 +22,14 @@
             value: {
                 type: [String, Array],
                 required: true,
+            },
+
+            size: {
+                type: String,
+                default: null,
+                validator: val => [
+                    's', 'm',
+                ].includes(val),
             },
 
             isHighlighted: Boolean,
@@ -41,6 +50,7 @@
                         _highlighted: this.isHighlighted,
                         _selected: this.isSelected,
                         _disabled: this.option.disabled,
+                        [this.$style[`_${this.size}`]]: this.size,
                     },
                 ];
             },
@@ -70,3 +80,31 @@
         },
     };
 </script>
+
+<style lang="scss" module>
+    $highlighted-background: $accept;
+    $select-color: $base-300;
+
+    .dropdownOption {
+        padding: 1.2rem 3.2rem;
+        cursor: pointer;
+
+        &._highlighted {
+            background-color: $highlighted-background;
+        }
+
+        &._selected {
+            color: $select-color;
+        }
+
+        &._disabled {
+            color: rgba(0, 0, 0, .25);
+            cursor: not-allowed;
+        }
+
+        &._m {
+            padding: 1.2rem;
+            font-size: 1.8rem;
+        }
+    }
+</style>

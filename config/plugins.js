@@ -6,5 +6,5 @@ export const plugins = [
     '~config/plugins/lazy-load',
     '~config/plugins/modal',
     '~config/plugins/perfect-scrollbar',
-    // '~/config/plugins/ui',
+    '~/config/plugins/ui',
 ];

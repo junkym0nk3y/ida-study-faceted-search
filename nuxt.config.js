@@ -63,7 +63,7 @@ module.exports = {
             './assets/scss/shared/_variables.scss',
             './assets/scss/default.scss',
         ],
-        hoistUseStatements: true,
+        // hoistUseStatements: true,
     },
 
     // * Plugins to load before mounting the App

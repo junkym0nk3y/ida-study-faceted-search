@@ -241,7 +241,6 @@
     };
 </script>
 
-
 <style lang="scss" module>
     .input {
         position: relative;

@@ -1,16 +1,9 @@
 import Vue from 'vue';
 
-// Импорт компонентов
-import VInput from '~/components/ui/input/VInput';
-import VSelect from '~/components/ui/select/VSelect';
-import VRangeInput from '~/components/ui/range-input/VRangeInput';
-import CheckboxButton from '~/components/ui/checkbox/CheckboxButton';
+import SingleSelect from '~/components/ui/select/SingleSelect';
 
 const components = [
-    VInput,
-    VSelect,
-    VRangeInput,
-    CheckboxButton,
+    SingleSelect,
 ];
 
 components.forEach(component => {

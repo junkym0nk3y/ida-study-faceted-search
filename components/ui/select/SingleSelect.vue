@@ -1,18 +1,18 @@
 <template>
     <div v-clickoutside="onClickOutside"
-         :class="['c-select', classList]"
+         :class="[$style.SingleSelect, classList]"
     >
 
-        <div class="c-select__field"
+        <div :class="$style.field"
              @click.stop="toggleMenu"
         >
             <input ref="input"
-                   class="c-select__input"
+                   :class="$style.nativeInput"
                    type="text"
                    :value="selectedLabel"
                    :disabled="isDisabled"
                    :readonly="true"
-                   @focus="onFocus"
+                   @focus.native="onFocus"
                    @keydown.down.stop.prevent="navigateOptions('down')"
                    @keydown.up.stop.prevent="navigateOptions('up')"
                    @keydown.enter.prevent="onEnterPress"
@@ -22,7 +22,7 @@
                    @mouseleave.native="inputHovering = false"
             />
 
-            <div class="c-select__arrow">
+            <div :class="$style.arrow">
                 <svg width="12"
                      height="7"
                      viewBox="0 0 12 7"
@@ -40,13 +40,14 @@
 
         <transition name="dropdown">
             <div v-if="isOpened"
-                 class="c-select__dropdown"
+                 :class="$style.dropdown"
             >
                 <perfect-scrollbar>
                     <Option v-for="(option, index) in optionList"
                             :key="option.value"
                             :option="option"
                             :value="value"
+                            :size="size"
                             :is-highlighted="highlightIndex === index"
                             @mouseenter="highlightIndex = index"
                             @mouseleave="highlightIndex = -1 "
@@ -58,8 +59,7 @@
 
         <select :name="name"
                 :required="required"
-                class="c-select__native"
-                :class="{['visible']: !isDisabled}"
+                :class="[$style.nativeSelect, {[$style._visible]: !isDisabled}]"
                 @change="onNativeChange"
         >
             <option v-for="option in mobileOptionList"
@@ -74,7 +74,7 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
     import Option from './Option';
 
     export default {
@@ -166,9 +166,8 @@
                         _error: this.error,
                         _success: this.success,
                         _bordered: this.bordered,
-
-                        [`_${this.color}`]: this.color,
-                        [`_${this.size}`]: this.size,
+                        [this.$style[`_${this.color}`]]: this.color,
+                        [this.$style[`_${this.size}`]]: this.size,
                     },
                 ];
             },
@@ -325,3 +324,175 @@
         },
     };
 </script>
+
+<style lang="scss" module>
+    $grey-background: $grey-light;
+    $grey-color: $grey;
+    $grey-accent-color: $base-300;
+    $select-background: $accept;
+
+    .SingleSelect {
+        position: relative;
+        z-index: 2;
+
+        &._grey {
+            &:after {
+                background-color: $grey-background;
+            }
+
+            input.nativeInput {
+                font-weight: 500;
+                color: $grey-color;
+            }
+
+            .arrow {
+                stroke: $grey-color;
+            }
+        }
+
+        &._s {
+            &:after {
+                content: none;
+            }
+
+            input.nativeInput {
+                height: 2.4rem;
+                padding-bottom: 0;
+                font-size: 1.4rem;
+            }
+        }
+
+        &._m {
+            &:after {
+                content: none;
+            }
+
+            input.nativeInput {
+                height: 2.4rem;
+                padding-bottom: 0;
+                font-size: 1.8rem;
+                font-weight: 400;
+            }
+
+            .dropdownWrap {
+                max-height: 24rem;
+            }
+        }
+
+        &._selected {
+            &:after {
+                background-color: $select-background;
+            }
+        }
+
+        &._focused {
+            input.nativeInput {
+                border-color: blue;
+            }
+        }
+
+        &._opened {
+            .arrow {
+                transform: rotate(180deg);
+            }
+        }
+
+        &._disabled {
+            opacity: .5;
+            pointer-events: none;
+
+            input.nativeInput {
+                pointer-events: none;
+            }
+        }
+
+        &:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            border-radius: 2px;
+            background-color: $grey-accent-color;
+        }
+    }
+
+    .field {
+        position: relative;
+        width: 100%;
+    }
+
+    .arrow {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 12px;
+        height: 2.4rem;
+        transition: transform .2s ease;
+        cursor: pointer;
+        stroke: white;
+
+        svg {
+            width: 100%;
+            height: 7px;
+        }
+    }
+
+    .dropdown {
+        position: absolute;
+        top: calc(100% - 4px);
+        left: 0;
+        z-index: 3;
+        width: 100%;
+        padding: 1.2rem 0;
+        border-radius: 4px;
+        background: #fff;
+        transition: opacity .2s ease, transform .2s ease;
+        box-shadow: 8px 8px 30px rgba(0, 0, 0, .12);
+        will-change: opacity, transform;
+
+        :global(.ps) {
+            max-height: 45.6rem;
+        }
+    }
+
+    input.nativeInput {
+        overflow: hidden;
+        display: inline-block;
+        width: 100%;
+        height: 4.2rem;
+        padding-right: 24px;
+        padding-bottom: 1.8rem;
+        text-overflow: ellipsis;
+        font-size: 2rem;
+        line-height: 1.2;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    select.nativeSelect {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        pointer-events: none;
+
+        @include respond-to(sm) {
+            z-index: 2;
+            display: block;
+            pointer-events: auto;
+        }
+
+        &._visible {
+            z-index: 2;
+            pointer-events: auto;
+        }
+    }
+</style>
