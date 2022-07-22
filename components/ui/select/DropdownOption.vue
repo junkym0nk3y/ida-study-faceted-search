@@ -1,5 +1,5 @@
 <template>
-    <div :class="[$style.Option, classList]"
+    <div :class="[$style.DropdownOption, classList]"
          @mouseenter="onMouseEnter"
          @mouseleave="onMouseLeave"
          @click="onClick"
@@ -10,7 +10,7 @@
 
 <script>
     export default {
-        name: 'Option',
+        name: 'DropdownOption',
 
         props: {
             option: {
@@ -47,9 +47,9 @@
             classList() {
                 return [
                     {
-                        _highlighted: this.isHighlighted,
-                        _selected: this.isSelected,
-                        _disabled: this.option.disabled,
+                        [this.$style._highlighted]: this.isHighlighted,
+                        [this.$style._selected]: this.isSelected,
+                        [this.$style._disabled]: this.option.disabled,
                         [this.$style[`_${this.size}`]]: this.size,
                     },
                 ];
@@ -61,6 +61,7 @@
                 if (this.option.disabled) {
                     return;
                 }
+
                 this.$emit('click', this.option);
             },
 
@@ -68,6 +69,7 @@
                 if (this.option.disabled) {
                     return;
                 }
+
                 this.$emit('mouseenter');
             },
 
@@ -75,6 +77,7 @@
                 if (this.option.disabled) {
                     return;
                 }
+
                 this.$emit('mouseleave');
             },
         },
@@ -85,16 +88,20 @@
     $highlighted-background: $accept;
     $select-color: $base-300;
 
-    .dropdownOption {
+    .DropdownOption {
         padding: 1.2rem 3.2rem;
+        font-size: 2.2rem;
+        font-weight: 500;
+        line-height: 1.2;
+        color: black;
         cursor: pointer;
 
         &._highlighted {
-            background-color: $highlighted-background;
+            background-color: rgba($accept, .3);
         }
 
         &._selected {
-            color: $select-color;
+            color: $accept;
         }
 
         &._disabled {
@@ -102,9 +109,8 @@
             cursor: not-allowed;
         }
 
-        &._m {
-            padding: 1.2rem;
-            font-size: 1.8rem;
+        &._hidden {
+            display: none;
         }
     }
 </style>

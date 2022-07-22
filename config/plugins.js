@@ -1,7 +1,7 @@
 export const plugins = [
     '~config/plugins/directives/index',
     '~config/plugins/filters',
-    '~config/plugins/axios',
+    '~config/plugins/axios-mock', // mockup адаптер для axios
     '~config/plugins/api',
     '~config/plugins/lazy-load',
     '~config/plugins/modal',

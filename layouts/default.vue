@@ -2,9 +2,7 @@
     <div id="app"
          :class="$style.DefaultLayout"
     >
-        <TheHeader
-            class="container"
-        />
+        <TheHeader />
 
         <main :class="$style.main">
             <nuxt />

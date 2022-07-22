@@ -1,28 +1,30 @@
 <template>
-    <div :class="$style.PrintHeader">
-        <svg-icon
-            :class="$style.logo"
-            name="ida-logo"
-        />
+    <div :class="$style.TheHeader">
+        <div :class="['container', $style.wrapper]">
+            <svg-icon
+                :class="$style.logo"
+                name="ida-logo"
+            />
 
-        <div :class="$style.title">учебные материалы</div>
+            <div :class="$style.title">учебные материалы</div>
 
-        <div :class="$style.phoneWrapper">
-            <div :class="$style.phone">
-                {{ phone }}
+            <div :class="$style.phoneWrapper">
+                <div :class="$style.phone">
+                    {{ phone }}
+                </div>
+                <span>
+                    <svg-icon
+                        name="arrow"
+                    />
+                </span>
             </div>
-            <span>
-                <svg-icon
-                    name="arrow"
-                />
-            </span>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: 'PrintHeader',
+        name: 'TheHeader',
 
         data() {
             return {
@@ -33,11 +35,8 @@
 </script>
 
 <style lang="scss" module>
-    .PrintHeader {
+    .TheHeader {
         position: relative;
-        display: flex;
-        align-items: center;
-        height: 6.2rem;
         background: $base-900;
 
         &:after {
@@ -48,6 +47,12 @@
             width: 100%;
             height: 1px;
         }
+    }
+
+    .wrapper {
+        display: flex;
+        align-items: center;
+        height: 6.2rem;
     }
 
     .logo {

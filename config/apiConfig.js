@@ -1,7 +1,7 @@
-// import report from '~/config/api/report';
+import projects from '~/config/api/projects';
 
 const apiConfig = {
-    // ...report,
+    ...projects,
 };
 
 export default apiConfig;

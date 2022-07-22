@@ -12,14 +12,14 @@
                    :value="selectedLabel"
                    :disabled="isDisabled"
                    :readonly="true"
-                   @focus.native="onFocus"
+                   @focus="onFocus"
                    @keydown.down.stop.prevent="navigateOptions('down')"
                    @keydown.up.stop.prevent="navigateOptions('up')"
                    @keydown.enter.prevent="onEnterPress"
                    @keydown.esc="isOpened = false"
                    @keydown.tab="onBlur"
-                   @mouseenter.native="inputHovering = true"
-                   @mouseleave.native="inputHovering = false"
+                   @mouseenter="inputHovering = true"
+                   @mouseleave="inputHovering = false"
             />
 
             <div :class="$style.arrow">
@@ -43,15 +43,16 @@
                  :class="$style.dropdown"
             >
                 <perfect-scrollbar>
-                    <Option v-for="(option, index) in optionList"
-                            :key="option.value"
-                            :option="option"
-                            :value="value"
-                            :size="size"
-                            :is-highlighted="highlightIndex === index"
-                            @mouseenter="highlightIndex = index"
-                            @mouseleave="highlightIndex = -1 "
-                            @click="onOptionSelect"
+                    <DropdownOption
+                        v-for="(option, index) in optionList"
+                        :key="option.value"
+                        :option="option"
+                        :value="value"
+                        :size="size"
+                        :is-highlighted="highlightIndex === index"
+                        @mouseenter="highlightIndex = index"
+                        @mouseleave="highlightIndex = -1 "
+                        @click="onOptionSelect"
                     />
                 </perfect-scrollbar>
             </div>
@@ -59,7 +60,7 @@
 
         <select :name="name"
                 :required="required"
-                :class="[$style.nativeSelect, {[$style._visible]: !isDisabled}]"
+                :class="[$style.nativeSelect, {[$style.visible]: !isDisabled}]"
                 @change="onNativeChange"
         >
             <option v-for="option in mobileOptionList"
@@ -75,19 +76,16 @@
 </template>
 
 <script>
-    import Option from './Option';
+    import DropdownOption from './DropdownOption';
 
     export default {
         name: 'SingleSelect',
 
         components: {
-            Option,
+            DropdownOption,
         },
 
         props: {
-            /**
-             * Имя поля формы
-             */
             name: {
                 type: String,
                 default: '',
@@ -98,39 +96,38 @@
                 required: true,
             },
 
-            options: {
+            specs: {
                 type: Array,
                 default: () => [],
             },
 
+            facets: {
+                type: Array,
+                default: undefined,
+            },
+
             placeholder: {
                 type: String,
-                default: '',
+                default: 'Все',
             },
 
             resetLabel: {
                 type: String,
-                default: '',
+                default: 'Все',
             },
 
             disabled: Boolean,
-            error: Boolean,
-            success: Boolean,
             required: Boolean,
             hideSelected: Boolean,
+
             bordered: {
                 type: Boolean,
                 default: true,
             },
 
-            facet: {
-                type: Array,
-                default: undefined,
-            },
-
             color: {
                 type: String,
-                default: null,
+                default: 'grey',
                 validator: val => [
                     'white',
                     'grey',
@@ -159,13 +156,11 @@
             classList() {
                 return [
                     {
-                        _selected: this.selectedOption,
-                        _focused: this.isFocused,
-                        _opened: this.isOpened,
-                        _disabled: this.isDisabled,
-                        _error: this.error,
-                        _success: this.success,
-                        _bordered: this.bordered,
+                        [this.$style._selected]: this.selectedOption,
+                        [this.$style._focused]: this.isFocused,
+                        [this.$style._opened]: this.isOpened,
+                        [this.$style._disabled]: this.isDisabled,
+                        [this.$style._bordered]: this.bordered,
                         [this.$style[`_${this.color}`]]: this.color,
                         [this.$style[`_${this.size}`]]: this.size,
                     },
@@ -173,51 +168,52 @@
             },
 
             optionList() {
-                const options = [];
+                const specs = [];
+
                 if (this.resetLabel && this.value) {
-                    options.push({
+                    specs.push({
                         label: this.resetLabel,
                         value: '',
                     });
                 }
 
-                this.options.forEach(opt => {
+                this.specs.forEach(opt => {
                     if (opt.value === this.value && this.hideSelected) {
                         return;
                     }
 
-                    options.push({
+                    specs.push({
                         ...opt,
-                        disabled: this.facet && !this.facet.includes(opt.value) && opt.value !== '',
+                        disabled: this.facets && !this.facets.includes(opt.value) && opt.value !== '',
                     });
                 });
 
-                return options;
+                return specs;
             },
 
             mobileOptionList() {
-                const options = [];
+                const specs = [];
 
                 if (this.resetLabel) {
-                    options.push({
+                    specs.push({
                         label: this.resetLabel ? this.resetLabel : '-',
                         value: '',
                         disabled: false,
                     });
                 }
 
-                this.options.forEach(opt => {
-                    options.push({
+                this.specs.forEach(opt => {
+                    specs.push({
                         ...opt,
-                        disabled: this.facet && !this.facet.includes(opt.value) && opt.value !== '',
+                        disabled: this.facets && !this.facets.includes(opt.value) && opt.value !== '',
                     });
                 });
 
-                return options;
+                return specs;
             },
 
             selectedOption() {
-                const selected = this.options.filter(a => a.value === this.value)[0];
+                const selected = this.specs.filter(a => a.value === this.value)[0];
                 return selected || null;
             },
 
@@ -228,7 +224,7 @@
             },
 
             isDisabled() {
-                return this.disabled || this.options.length === 0;
+                return this.disabled || this.specs.length === 0;
             },
         },
 
@@ -261,6 +257,7 @@
                 if (this.isDisabled) {
                     return;
                 }
+
                 this.isOpened = !this.isOpened;
 
                 if (this.isOpened) {
@@ -283,6 +280,7 @@
                         this.$emit('change', { [this.name]: option.value }) :
                         this.$emit('change', option.value);
                 }
+
                 this.isOpened = false;
                 this.$refs.input.focus();
             },
@@ -334,6 +332,7 @@
     .SingleSelect {
         position: relative;
         z-index: 2;
+        user-select: none;
 
         &._grey {
             &:after {
