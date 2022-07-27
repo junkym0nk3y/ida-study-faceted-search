@@ -96,7 +96,8 @@
 </template>
 
 <script>
-    import { splitThousands } from '../../assets/js/utils';
+    import { splitThousands } from '../../../assets/js/utils/numbers-utils';
+
     import SliderDot from './SliderDot';
 
     export default {
@@ -572,6 +573,9 @@
 </script>
 
 <style lang="scss">
+    $grey-medium: #d6dde9;
+    $progress-color: #1162d9;
+
     .c-slider {
 
         /* Colors */
@@ -582,11 +586,11 @@
             }
 
             .c-slider__progress {
-                background-color: $ab-blue;
+                background-color: $progress-color;
             }
 
             .c-slider-dot__handle {
-                background-color: $ab-blue;
+                background-color: $progress-color;
             }
         }
 

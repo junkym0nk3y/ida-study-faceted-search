@@ -15,7 +15,7 @@
 
 <script>
     // Utils
-    import { objectToQuery } from '../assets/js/utils';
+    import { objectToQuery, applyQuery } from '../assets/js/utils';
     import { prepareSpecs } from '../assets/js/utils/filterUtils';
 
     // Components
@@ -36,9 +36,8 @@
             FilterProjects,
         },
 
-
-        async asyncData({ app }) {
-            const values = { zone: 'moscow', complete: false };
+        async asyncData({ app, query }) {
+            const values = applyQuery({ ...defaultValues }, query);
 
             try {
                 const [projectsRes, specsRes, facetsRes] = await Promise.all([
@@ -54,9 +53,10 @@
                 ]);
 
                 return {
-                    projects: projectsRes || {},
+                    items: projectsRes || [],
                     facets: prepareSpecs(facetsRes) || {},
                     specs: prepareSpecs(specsRes) || {},
+                    count: projectsRes?.length || 0,
                 };
             } catch (err) {
                 console.warn('[MainPage/asyncData] request failed: ', err);
@@ -67,19 +67,108 @@
             return {
                 specs: {},
                 facets: {},
-                projects: {},
+                items: [],
                 values: { ...defaultValues },
                 count: 0,
+                isReloadActive: false,
             };
         },
 
         methods: {
-            onTypeChange(val) {
-                console.log(val);
+            async onFilterChange(val) {
+                if (val === 'reset') {
+                    await this.handleReset();
+                    return;
+                }
+
+                if (val[Object.keys(val)[0]] === false) {
+                    delete this.values[Object.keys(val)[0]];
+                } else {
+                    this.values = { ...this.values, ...val };
+                }
+
+                await this.handleUpdateItems();
             },
 
-            onFilterChange(val) {
-                this.values = { ...this.values, ...val };
+            async handleReset() {
+                if (JSON.stringify(this.values) !== JSON.stringify(defaultValues)) {
+                    this.values = { ...defaultValues };
+                    await this.handleUpdateItems();
+                }
+            },
+
+            async handleUpdateItems() {
+                this.isReloadActive = true;
+
+                const [projectsRes, specsRes, facetsRes] = await Promise.all([
+                    this.handleFetchItems(),
+                    this.handleFetchSpecs(),
+                    this.handleFetchFacets(),
+                ]);
+
+                this.items = projectsRes || [];
+                this.count = this.items.length || 0;
+                this.facets = prepareSpecs(facetsRes) || {};
+                this.specs = prepareSpecs(specsRes) || {};
+                this.handleUpdateQuery();
+                this.isReloadActive = false;
+            },
+
+
+            async handleFetchItems() {
+                try {
+                    const resp = await this.$axios.$get(this.$api.projects.list, {
+                        params: this.values,
+                        paramsSerializer: params => objectToQuery(params),
+                    });
+                    return resp || [];
+                } catch (err) {
+                    console.warn('[projectsPage/handleFetchItems] request failed: ', err);
+                }
+            },
+
+            async handleFetchSpecs() {
+                try {
+                    const resp = await this.$axios.$get(this.$api.projects.specs, {
+                        params: this.values,
+                        paramsSerializer: params => objectToQuery(params),
+                    });
+                    return resp || [];
+                } catch (err) {
+                    console.warn('[projectsPage/handleFetchSpecs] request failed: ', err);
+                }
+            },
+
+            async handleFetchFacets() {
+                try {
+                    const resp = await this.$axios.$get(this.$api.projects.facets, {
+                        params: this.values,
+                        paramsSerializer: params => objectToQuery(params),
+                    });
+                    return resp || [];
+                } catch (err) {
+                    console.warn('[projectsPage/handleFetchFacets] request failed: ', err);
+                }
+            },
+
+            handleUpdateQuery() {
+                const query = {};
+
+                const values = { ...this.values };
+                delete values.type;
+
+                Object.keys(values)
+                    .forEach(key => {
+                        if (values[key] !== '') {
+                            query[key] = values[key];
+                        }
+                    });
+
+                let url = `${this.$route.path}?`;
+                Object.keys(query).length
+                    ? url += objectToQuery(query)
+                    : url = url.slice(0, -1);
+                window.history.replaceState(null, null, url);
             },
         },
     };

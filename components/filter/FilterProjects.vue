@@ -6,6 +6,7 @@
                 name="zone"
                 :value="values.zone"
                 :specs="specs.zone"
+                :facets="facets.zone"
                 placeholder="Район"
                 @change="$emit('change', $event)"
             />
@@ -15,6 +16,7 @@
                 name="propertyType"
                 :value="values.propertyType"
                 :specs="specs.propertyType"
+                :facets="facets.propertyType"
                 placeholder="Купить"
                 @change="$emit('change', $event)"
             />
@@ -24,11 +26,20 @@
                 name="complete"
                 :value="values.complete"
                 :specs="specs.complete"
+                :facets="facets.complete"
                 placeholder="Срок сдачи"
                 @change="$emit('change', $event)"
             />
-        </div>
 
+            <RangeFilter
+                :name="['price_min', 'price_max']"
+                :spec="specs.price"
+                :facet="facets.price"
+                :value-min="values.price_min"
+                :value-max="values.price_max"
+                @change="$emit('change', $event)"
+            />
+        </div>
     </div>
 </template>
 

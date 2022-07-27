@@ -1,7 +1,7 @@
 <template>
     <div :class="$style.RangeFilter">
         <div :class="$style.inputs">
-            <CInputThousands
+            <InputThousands
                 :value="value[0]"
                 :class="$style.input"
                 :color="color"
@@ -10,7 +10,7 @@
                 @change="onInputChange($event, 'first')"
             />
 
-            <CInputThousands
+            <InputThousands
                 :value="value[1]"
                 :class="$style.input"
                 :color="color"
@@ -31,10 +31,20 @@
 </template>
 
 <script>
+    import Slider from '../slider/Slider';
+    import InputThousands from '../input/InputThousands';
+
     export default {
+        name: 'RangeFilter',
+
+        components: {
+            Slider,
+            InputThousands,
+        },
+
         props: {
             name: {
-                type: String,
+                type: [Array, String],
                 required: true,
             },
 
@@ -166,9 +176,18 @@
                     maxValue = '';
                 }
 
+                let name = [];
+                if (Array.isArray(this.name)) {
+                    name = [...this.name];
+                } else {
+                    name = [`${this.name}Min`, `${this.name}Max`];
+                }
+
+                console.warn(name[0]);
+
                 this.$emit('change', {
-                    [`${this.name}Min`]: minValue,
-                    [`${this.name}Max`]: maxValue,
+                    [name[0]]: minValue,
+                    [name[1]]: maxValue,
                 });
             },
         },

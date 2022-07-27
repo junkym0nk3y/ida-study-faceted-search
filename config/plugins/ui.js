@@ -1,9 +1,11 @@
 import Vue from 'vue';
 
 import SingleSelect from '~/components/ui/select/SingleSelect';
+import RangeFilter from '~/components/ui/range/RangeFilter';
 
 const components = [
     SingleSelect,
+    RangeFilter,
 ];
 
 components.forEach(component => {

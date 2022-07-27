@@ -164,7 +164,6 @@ export function applyQuery(defaulValues, queryValues) {
         }
     }
 
-    // console.log('applyQuery result__', values);
 
     return values;
 }
