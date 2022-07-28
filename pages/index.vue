@@ -9,6 +9,8 @@
                 :values="values"
                 @change="onFilterChange"
             />
+
+            {{ items }}
         </div>
     </div>
 </template>
@@ -28,6 +30,8 @@
         price_max: '',
         price_min: '',
     };
+
+    const arrUpdateSpecs = ['zone'];
 
     export default {
         name: 'MainPage',
@@ -57,6 +61,7 @@
                     facets: prepareSpecs(facetsRes) || {},
                     specs: prepareSpecs(specsRes) || {},
                     count: projectsRes?.length || 0,
+                    values,
                 };
             } catch (err) {
                 console.warn('[MainPage/asyncData] request failed: ', err);
@@ -81,35 +86,42 @@
                     return;
                 }
 
-                if (val[Object.keys(val)[0]] === false) {
+                if (Object.values(val)[0] === false) {
                     delete this.values[Object.keys(val)[0]];
                 } else {
                     this.values = { ...this.values, ...val };
                 }
 
-                await this.handleUpdateItems();
+                const valueKey = Object.keys(val)[0];
+                await this.handleUpdateItems(arrUpdateSpecs.includes(valueKey));
             },
 
             async handleReset() {
                 if (JSON.stringify(this.values) !== JSON.stringify(defaultValues)) {
                     this.values = { ...defaultValues };
-                    await this.handleUpdateItems();
+                    await this.handleUpdateItems(true);
                 }
             },
 
-            async handleUpdateItems() {
+            async handleUpdateItems(updateSpecs = false) {
                 this.isReloadActive = true;
 
-                const [projectsRes, specsRes, facetsRes] = await Promise.all([
+                const [projectsRes, facetsRes] = await Promise.all([
                     this.handleFetchItems(),
-                    this.handleFetchSpecs(),
                     this.handleFetchFacets(),
                 ]);
+
+                if (updateSpecs) {
+                    const specsRes = await this.handleFetchSpecs();
+                    const zoneIndex = specsRes.findIndex(i => i.name === 'zone');
+                    delete specsRes[zoneIndex];
+                    this.specs = { ...this.specs, ...prepareSpecs(specsRes) } || {};
+                }
 
                 this.items = projectsRes || [];
                 this.count = this.items.length || 0;
                 this.facets = prepareSpecs(facetsRes) || {};
-                this.specs = prepareSpecs(specsRes) || {};
+
                 this.handleUpdateQuery();
                 this.isReloadActive = false;
             },

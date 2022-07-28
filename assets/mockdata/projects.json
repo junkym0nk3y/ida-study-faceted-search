@@ -11,55 +11,55 @@
                 {
                     "price": 1000000,
                     "type": "storage",
-                    "complete": true,
+                    "complete": "true",
                     "zone": "spb"
                 },
                 {
                     "price": 1000000,
                     "type": "parking",
-                    "complete": true,
+                    "complete": "true",
                     "zone": "spb"
                 },
                 {
                     "price": 1000000,
                     "type": "flat",
-                    "complete": true,
+                    "complete": "true",
                     "zone": "spb"
                 },
                 {
                     "price": 1000000,
                     "type": "flat",
-                    "complete": true,
+                    "complete": "true",
                     "zone": "spb"
                 },
                 {
                     "price": 1200000,
                     "type": "flat",
-                    "complete": true,
+                    "complete": "true",
                     "zone": "spb"
                 },
                 {
                     "price": 7400000,
                     "type": "flat",
-                    "complete": true,
+                    "complete": "true",
                     "zone": "spb"
                 },
                 {
                     "price": 18000000,
                     "type": "flat",
-                    "complete": true,
+                    "complete": "true",
                     "zone": "spb"
                 },
                 {
                     "price": 34000000,
                     "type": "flat",
-                    "complete": true,
+                    "complete": "true",
                     "zone": "spb"
                 },
                 {
                     "price": 43000000,
                     "type": "flat",
-                    "complete": true,
+                    "complete": "true",
                     "zone": "spb"
                 }
             ]
@@ -75,43 +75,43 @@
                 {
                     "price": 990000,
                     "type": "flat",
-                    "complete": false,
+                    "complete": "false",
                     "zone": "moscow"
                 },
                 {
                     "price": 1000000,
                     "type": "flat",
-                    "complete": false,
+                    "complete": "false",
                     "zone": "moscow"
                 },
                 {
                     "price": 1200000,
                     "type": "flat",
-                    "complete": false,
+                    "complete": "false",
                     "zone": "moscow"
                 },
                 {
                     "price": 7400000,
                     "type": "flat",
-                    "complete": false,
+                    "complete": "false",
                     "zone": "moscow"
                 },
                 {
                     "price": 8200000,
                     "type": "flat",
-                    "complete": false,
+                    "complete": "false",
                     "zone": "moscow"
                 },
                 {
                     "price": 9300000,
                     "type": "flat",
-                    "complete": false,
+                    "complete": "false",
                     "zone": "moscow"
                 },
                 {
                     "price": 13000000,
                     "type": "flat",
-                    "complete": false,
+                    "complete": "false",
                     "zone": "moscow"
                 }
             ]

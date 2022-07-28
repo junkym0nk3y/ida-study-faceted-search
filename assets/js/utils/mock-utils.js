@@ -56,7 +56,7 @@ export const handleSpecs = (array, specs = false) => {
         completeChoices = [...new Set(complete)].map(elem => {
             return {
                 label: completeTypes[elem],
-                value: elem,
+                value: elem.toString(),
             };
         });
     } else {
@@ -102,10 +102,16 @@ export const handleFilters = (array, params) => {
 
                 switch (key) {
                     case 'price_min':
-                        checks.push(Number(p.price) <= Number(value));
-                        break;
                     case 'price_max':
-                        checks.push(Number(p.price) >= Number(value));
+                        if (params.price_max && params.price_min) {
+                            checks.push(Number(params.price_min) <= Number(p.price) <= Number(params.price_max));
+                        } else {
+                            if (key === 'price_min') {
+                                checks.push(Number(value) <= Number(p.price));
+                            } else {
+                                checks.push(Number(p.price) <= Number(value));
+                            }
+                        }
                         break;
                     default:
                         checks.push(p[key] !== value);
